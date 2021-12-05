@@ -1,8 +1,10 @@
 <template>
-  Dashboard
+  <Navbar></Navbar>
+  <router-view />
 </template>
 
 <script>
+import Navbar from '../components/Navbar.vue'
 export default {
   created () {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1')
@@ -13,6 +15,9 @@ export default {
         this.$router.push('/login')
       }
     })
+  },
+  components: {
+    Navbar
   }
 }
 </script>
