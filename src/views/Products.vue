@@ -1,6 +1,6 @@
 <template>
   <div class="text-end">
-    <button type="button" class="btn btn-primary mt-3" @click="$refs.productModal.showModal()">新增產品</button>
+    <button type="button" class="btn btn-primary mt-3" @click="openModal(true)">新增產品</button>
   </div>
   <table class="table mt-4">
     <thead>
@@ -25,7 +25,7 @@
         </td>
         <td>
           <div class="btn-group">
-            <button class="btn btn-outline-primary btn-sm">編輯</button>
+            <button class="btn btn-outline-primary btn-sm" @click="openModal(false, item)">編輯</button>
             <button class="btn btn-outline-danger btn-sm">刪除</button>
           </div>
         </td>
@@ -43,7 +43,8 @@ export default {
     return {
       products: [],
       pagination: {},
-      tempProduct: {}
+      tempProduct: {},
+      isNew: false
     }
   },
   components: {
@@ -60,8 +61,13 @@ export default {
         }
       })
     },
-    openModal () {
-      this.tempProduct = {}
+    openModal (isNew, item) {
+      if (isNew) {
+        this.tempProduct = {}
+      } else {
+        this.tempProduct = { ...item }
+      }
+      this.isNew = isNew
       const productComponent = this.$refs.productModal
       productComponent.showModal()
     },
