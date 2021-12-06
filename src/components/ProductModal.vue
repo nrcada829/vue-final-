@@ -231,6 +231,18 @@ export default {
     },
     hideModal () {
       this.modal.hide()
+    },
+    uploadFile () {
+      const uploadFile = this.$refs.fileInput.files[0]
+      const fromData = new FormData()
+      fromData.append('file-to-upload', uploadFile)
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/upload`
+      this.$http.post(api, fromData).then((res) => {
+        console.log(res)
+        if (res.data.success) {
+          this.tempProduct.imageUrl = res.data.imageUrl
+        }
+      })
     }
   },
   mounted () {

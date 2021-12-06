@@ -73,9 +73,14 @@ export default {
     },
     updateProduct (item) {
       this.tempProduct = item
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
+      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`
+      let httpMethod = 'post'
       const productComponent = this.$refs.productModal
-      this.$http.post(api, { data: this.tempProduct }).then((res) => {
+      if (!this.isNew) {
+        api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
+        httpMethod = 'put'
+      }
+      this.$http[httpMethod](api, { data: this.tempProduct }).then((res) => {
         console.log(res)
         productComponent.hideModal()
         this.getProducts()
