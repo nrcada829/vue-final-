@@ -51,6 +51,7 @@ export default {
       isLoading: false
     }
   },
+  inject: ['emitter'],
   components: {
     ProductModal,
     DelModal
@@ -86,11 +87,22 @@ export default {
         api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`
         httpMethod = 'put'
       }
-      this.isLoading = true
       this.$http[httpMethod](api, { data: this.tempProduct }).then((res) => {
-        this.isLoading = false
+        console.log(res)
         productComponent.hideModal()
-        this.getProducts()
+        if (res.data.success) {
+          this.getProducts()
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: '更新成功'
+          })
+        } else {
+          this.emitter.emit('push-message', {
+            style: 'danger',
+            title: '更新失敗',
+            content: res.data.message.join('、')
+          })
+        }
       })
     },
     openDelProductModal (item) {
@@ -105,7 +117,13 @@ export default {
         this.isLoading = false
         const delComponent = this.$refs.delProductModal
         delComponent.hideModal()
-        this.getProducts()
+        if (res.data.success) {
+          this.getProducts()
+          this.emitter.emit('push-message', {
+            style: 'success',
+            title: '刪除成功'
+          })
+        }
       })
     }
   },
